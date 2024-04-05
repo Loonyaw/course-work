@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: SpringLab2
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5433/ # your database
+    username: # your username
+    password: # your password
+    driverClassName: org.postgresql.Driver
