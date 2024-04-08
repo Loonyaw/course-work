@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="shortcut icon" type="image/png" href="img/icon.png" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/css/style.css" />
+    <link rel="stylesheet" href="src/css/responsive.css" />
+    <title>Банкист | Когда банкинг встречается с минималистом</title>
+    <script defer src="/src/pages/home/index.js"></script>
+  </head>
+  <body>
+    <header class="header">
+      <nav class="nav">
+        <img
+          src="img/logo.png"
+          alt="Логотип Банкист"
+          class="nav__logo"
+          id="logo"
+        />
+        <ul class="nav__links">
+          <li class="nav__item">
+            <a class="nav__link" href="#section--1">Функционал</a>
+          </li>
+          <li class="nav__item">
+            <a class="nav__link" href="#section--2">Операции</a>
+          </li>
+          <li class="nav__item">
+            <a class="nav__link" href="#section--3">Отзывы</a>
+          </li>
+          <li class="nav__item">
+            <a
+              class="nav__link nav__link--btn btn--show-modal"
+              href="/src/pages/register/register.html"
+              >Открыть счет</a
+            >
+          </li>
+        </ul>
+        <img class="hamburger" src="img/hamburger.png" alt="Меню" />
+      </nav>
+
+      <div class="header__title">
+        <section class="header-content">
+          <h1>
+            Когда <span class="highlight">банкинг</span> встречается с
+            <span class="highlight">минималистом</span>
+          </h1>
+          <h4>Более простой банковский опыт для более простой жизни.</h4>
+          <button class="btn--text btn--scroll-to" disabled>
+            Узнать больше &DownArrow;
+          </button>
+        </section>
+
+        <img
+          src="img/hero.png"
+          class="header__img"
+          alt="Минималистичные банковские предметы"
+        />
+      </div>
+    </header>
+
+    <section class="section section-1" id="section--1">
+      <div class="section__title">
+        <h2 class="section__description">Функционал</h2>
+        <h3 class="section__header">
+          Всё, что вам нужно в современном банке, и даже больше.
+        </h3>
+      </div>
+
+      <div class="features">
+        <section class="feature-one">
+          <img
+            src="img/digital-lazy.jpg"
+            data-src="img/digital.jpg"
+            alt="Компьютер"
+            class="features__img lazy-img"
+          />
+          <div class="features__feature">
+            <div class="features__icon">
+              <svg><use xlink:href="img/icons.svg#icon-monitor"></use></svg>
+            </div>
+            <h5 class="features__header">100% цифровой банк</h5>
+            <p>
+              Мы предлагаем полностью цифровые банковские услуги, позволяющие
+              вам управлять своими финансами удобно и эффективно.
+            </p>
+          </div>
+        </section>
+        С
+        <section class="feature-two">
+          <div class="features__feature">
+            <div class="features__icon">
+              <svg><use xlink:href="img/icons.svg#icon-trending-up"></use></svg>
+            </div>
+            <h5 class="features__header">Смотрите, как растут ваши деньги</h5>
+            <p>
+              Используйте наши инвестиционные продукты и смотрите, как ваш
+              капитал растет благодаря выгодным условиям.
+            </p>
+          </div>
+          <img
+            src="img/grow-lazy.jpg"
+            data-src="img/grow.jpg"
+            alt="Растение"
+            class="features__img lazy-img"
+          />
+        </section>
+        <section class="feature-three">
+          <img
+            src="img/card-lazy.jpg"
+            data-src="img/card.jpg"
+            alt="Кредитная карта"
+            class="features__img lazy-img"
+          />
+          <div class="features__feature">
+            <div class="features__icon">
+              <svg><use xlink:href="img/icons.svg#icon-credit-card"></use></svg>
+            </div>
+            <h5 class="features__header">
+              Бесплатная дебетовая карта включена
+            </h5>
+            <p>
+              Получите бесплатную дебетовую карту при открытии счета. Простое и
+              удобное управление вашими средствами.
+            </p>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="section" id="section--2">
+      <div class="section__title">
+        <h2 class="section__description">Операции</h2>
+        <h3 class="section__header">
+          Все максимально упрощено для вашего удобства.
+        </h3>
+      </div>
+
+      <section class="operations">
+        <section class="operations__tab-container">
+          <button
+            class="btn operations__tab operations__tab--1 operations__tab--active"
+            data-tab="1"
+          >
+            <span>01</span>Мгновенные переводы
+          </button>
+          <button class="btn operations__tab operations__tab--2" data-tab="2">
+            <span>02</span>Мгновенные кредиты
+          </button>
+          <button class="btn operations__tab operations__tab--3" data-tab="3">
+            <span>03</span>Мгновенное закрытие счета
+          </button>
+        </section>
+        <div
+          class="operations__content operations__content--1 operations__content--active"
+        >
+          <div class="operations__icon operations__icon--1">
+            <svg><use xlink:href="img/icons.svg#icon-upload"></use></svg>
+          </div>
+          <h5 class="operations__header">
+            Переводите деньги кому угодно, мгновенно! Без комиссий, без проблем.
+          </h5>
+          <p id="operations__body">
+            С нашими услугами вы можете легко переводить деньги в любую точку
+            мира без лишних комиссий и задержек.
+          </p>
+        </div>
+
+        <div class="operations__content operations__content--2">
+          <div class="operations__icon operations__icon--2">
+            <svg><use xlink:href="img/icons.svg#icon-home"></use></svg>
+          </div>
+          <h5 class="operations__header">
+            Купите дом или осуществите свои мечты с помощью мгновенных кредитов.
+          </h5>
+          <p id="operations__body">
+            Мы предлагаем быстрые и удобные кредиты для реализации ваших мечт с
+            минимальными формальностями и высокой скоростью одобрения.
+          </p>
+        </div>
+        <div class="operations__content operations__content--3">
+          <div class="operations__icon operations__icon--3">
+            <svg><use xlink:href="img/icons.svg#icon-user-x"></use></svg>
+          </div>
+          <h5 class="operations__header">
+            Больше не нужен ваш счет? Без проблем! Закройте его мгновенно.
+          </h5>
+          <p id="operations__body">
+            С нашим банком вы можете легко управлять своими счетами и закрыть их
+            в любой момент без дополнительных усложнений.
+          </p>
+        </div>
+      </section>
+    </section>
+
+    <section class="section" id="section--3">
+      <div class="section__title section__title--testimonials">
+        <h2 class="section__description">Все еще не уверены?</h2>
+        <h3 class="section__header">
+          Миллионы пользователей Банкиста уже упростили свою жизнь.
+        </h3>
+      </div>
+      <div class="slider">
+        <div class="slide slide--1">
+          <div class="testimonial">
+            <h5 class="testimonial__header">
+              Лучшее финансовое решение в моей жизни!
+            </h5>
+            <blockquote class="testimonial__text">
+              С момента открытия счета в Банкисте я заметил, насколько проще
+              стало управлять моими финансами. Все мои операции теперь в одном
+              месте, что экономит мне кучу времени.
+            </blockquote>
+            <address class="testimonial__author">
+              <img src="img/user-1.jpg" alt="" class="testimonial__photo" />
+              <h6 class="testimonial__name">Морган Рид</h6>
+              <p class="testimonial__location">Сан-Франциско, США</p>
+            </address>
+          </div>
+        </div>
+
+        <div class="slide slide--2">
+          <div class="testimonial">
+            <h5 class="testimonial__header">
+              Последний шаг к полному минимализму
+            </h5>
+            <blockquote class="testimonial__text">
+              Переход на Банкист избавил меня от необходимости использовать
+              несколько приложений и услуг. Теперь все мои финансовые нужды
+              удовлетворяются через одно приложение.
+            </blockquote>
+            <address class="testimonial__author">
+              <img src="img/user-2.jpg" alt="" class="testimonial__photo" />
+              <h6 class="testimonial__name">Мия Майлз</h6>
+              <p class="testimonial__location">Лондон, Великобритания</p>
+            </address>
+          </div>
+        </div>
+
+        <div class="slide slide--3">
+          <div class="testimonial">
+            <h5 class="testimonial__header">
+              Наконец-то свободен от старых банков
+            </h5>
+            <blockquote class="testimonial__text">
+              С Банкистом я забыл о бюрократии и неудобствах старомодных банков.
+              Сейчас все мои финансовые дела решаются быстро и просто.
+            </blockquote>
+            <address class="testimonial__author">
+              <img src="img/user-3.jpg" alt="" class="testimonial__photo" />
+              <h6 class="testimonial__name">Джонатан Ривера</h6>
+              <p class="testimonial__location">Мадрид, Испания</p>
+            </address>
+          </div>
+        </div>
+        <button class="slider__btn slider__btn--left">&larr;</button>
+        <button class="slider__btn slider__btn--right">&rarr;</button>
+        <div class="dots"></div>
+      </div>
+    </section>
+
+    <section class="section section--sign-up">
+      <div class="section__title">
+        <h3 class="section__header">
+          Лучший день, чтобы присоединиться к Банкисту был год назад. Следующий
+          лучший день - сегодня!
+        </h3>
+      </div>
+      <button
+        class="btn btn--show-modal"
+        href="/src/pages/register/register.html"
+      >
+        Откройте свой бесплатный счет сегодня!
+      </button>
+    </section>
+
+    <footer class="footer">
+      <ul class="footer__nav">
+        <li class="footer__item">
+          <a class="footer__link" href="#">О нас</a>
+        </li>
+        <li class="footer__item">
+          <a class="footer__link" href="#">Тарифы</a>
+        </li>
+        <li class="footer__item">
+          <a class="footer__link" href="#">Условия использования</a>
+        </li>
+        <li class="footer__item">
+          <a class="footer__link" href="#">Политика конфиденциальности</a>
+        </li>
+        <li class="footer__item">
+          <a class="footer__link" href="#">Карьера</a>
+        </li>
+        <li class="footer__item">
+          <a class="footer__link" href="#">Блог</a>
+        </li>
+        <li class="footer__item">
+          <a class="footer__link" href="#">Контакты</a>
+        </li>
+      </ul>
+      <img src="img/icon.png" alt="Логотип" class="footer__logo" />
+      <p class="footer__copyright">
+        &copy; Все авторские права принадлежат
+        <a class="footer__link" target="_blank" href="https://linktr.ee/r1dze"
+          >ridze</a
+        >. Не претендуйте на это как на свой собственный продукт.
+      </p>
+    </footer>
+
+    <div class="overlay hidden"></div>
+  </body>
+</html>
