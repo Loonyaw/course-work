@@ -21,7 +21,7 @@
         <span class="highlight">Зарегистрируйтесь</span> чтобы начать
       </h1>
       <div class="form-container">
-        <form class="login">
+        <form class="login" id="registrationForm">
           <input
             type="text"
             placeholder="Имя пользователя"
@@ -47,6 +47,7 @@
             required
           />
           <button class="login__btn">&rarr;</button>
+          <p class="warning-text" id="registerWarningText"></p>
         </form>
 
         <div class="login-footer">
@@ -58,5 +59,6 @@
         </div>
       </div>
     </div>
+    <script src="/src/pages/register/register.js"></script>
   </body>
 </html>
