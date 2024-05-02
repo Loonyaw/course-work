@@ -1,4 +1,4 @@
-package ua.opnu.springlab2;
+package ua.opnu.bankist;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

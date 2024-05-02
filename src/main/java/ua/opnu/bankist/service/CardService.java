@@ -1,9 +1,9 @@
-package ua.opnu.springlab2.service;
+package ua.opnu.bankist.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.opnu.springlab2.model.Card;
-import ua.opnu.springlab2.repo.CardRepository;
+import ua.opnu.bankist.model.Card;
+import ua.opnu.bankist.repo.CardRepository;
 
 import java.util.Date;
 import java.util.Random;

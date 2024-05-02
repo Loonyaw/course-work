@@ -1,13 +1,13 @@
-package ua.opnu.springlab2;
+package ua.opnu.bankist;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SpringLab2Application {
+public class SpringBankistApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringLab2Application.class, args);
+        SpringApplication.run(SpringBankistApplication.class, args);
     }
 
 }

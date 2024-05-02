@@ -1,10 +1,10 @@
-package ua.opnu.springlab2;
+package ua.opnu.bankist;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringLab2ApplicationTests {
+class SpringBankistApplicationTests {
 
     @Test
     void contextLoads() {

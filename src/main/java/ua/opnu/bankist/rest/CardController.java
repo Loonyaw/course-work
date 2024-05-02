@@ -1,4 +1,4 @@
-package ua.opnu.springlab2.rest;
+package ua.opnu.bankist.rest;
 
 public class CardController {
 }

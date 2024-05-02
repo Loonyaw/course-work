@@ -1,4 +1,4 @@
-package ua.opnu.springlab2.model;
+package ua.opnu.bankist.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

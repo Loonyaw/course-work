@@ -1,6 +1,6 @@
-package ua.opnu.springlab2.repo;
+package ua.opnu.bankist.repo;
 
-import ua.opnu.springlab2.model.Card;
+import ua.opnu.bankist.model.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

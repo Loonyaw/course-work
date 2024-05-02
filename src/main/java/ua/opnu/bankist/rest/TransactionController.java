@@ -1,7 +1,7 @@
-package ua.opnu.springlab2.rest;
+package ua.opnu.bankist.rest;
 
-import ua.opnu.springlab2.model.Transaction;
-import ua.opnu.springlab2.service.TransactionService;
+import ua.opnu.bankist.model.Transaction;
+import ua.opnu.bankist.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

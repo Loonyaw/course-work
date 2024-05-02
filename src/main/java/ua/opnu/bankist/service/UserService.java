@@ -1,13 +1,13 @@
-package ua.opnu.springlab2.service;
+package ua.opnu.bankist.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import ua.opnu.springlab2.model.Card;
-import ua.opnu.springlab2.model.User;
-import ua.opnu.springlab2.repo.UserRepository;
+import ua.opnu.bankist.model.Card;
+import ua.opnu.bankist.model.User;
+import ua.opnu.bankist.repo.UserRepository;
 
 import java.util.List;
 import java.util.Optional;

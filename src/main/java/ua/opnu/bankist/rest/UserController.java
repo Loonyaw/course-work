@@ -1,9 +1,9 @@
-package ua.opnu.springlab2.rest;
+package ua.opnu.bankist.rest;
 
 import org.springframework.http.HttpStatus;
-import ua.opnu.springlab2.model.User;
-import ua.opnu.springlab2.repo.UserRepository;
-import ua.opnu.springlab2.service.UserService;
+import ua.opnu.bankist.model.User;
+import ua.opnu.bankist.repo.UserRepository;
+import ua.opnu.bankist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,6 +1,6 @@
-package ua.opnu.springlab2.repo;
+package ua.opnu.bankist.repo;
 
-import ua.opnu.springlab2.model.Transaction;
+import ua.opnu.bankist.model.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

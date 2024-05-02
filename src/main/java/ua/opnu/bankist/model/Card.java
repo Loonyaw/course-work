@@ -1,4 +1,4 @@
-package ua.opnu.springlab2.model;
+package ua.opnu.bankist.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

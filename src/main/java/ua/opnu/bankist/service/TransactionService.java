@@ -1,7 +1,7 @@
-package ua.opnu.springlab2.service;
+package ua.opnu.bankist.service;
 
-import ua.opnu.springlab2.model.Transaction;
-import ua.opnu.springlab2.repo.TransactionRepository;
+import ua.opnu.bankist.model.Transaction;
+import ua.opnu.bankist.repo.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
