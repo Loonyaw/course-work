@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ua.opnu</groupId>
-    <artifactId>SpringLab2</artifactId>
+    <artifactId>bankist</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>SpringLab2</name>
-    <description>SpringLab2</description>
+    <name>bankist</name>
+    <description>bankist</description>
     <properties>
         <java.version>17</java.version>
     </properties>

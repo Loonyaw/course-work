@@ -99,4 +99,27 @@ public class UserController {
         }
         return ResponseEntity.ok(false);
     }
+
+    @PostMapping("/{userId}/requestLoan")
+    public ResponseEntity<?> requestLoan(@PathVariable Long userId, @RequestBody Map<String, Double> request) {
+        double amount = request.get("amount");
+        boolean isApproved = userService.requestLoan(userId, amount);
+        if (isApproved) {
+            return ResponseEntity.ok("Loan Approved");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Loan Request Failed");
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<?> transferMoney(@RequestBody Map<String, Object> transferDetails) {
+        Long fromId = Long.parseLong(transferDetails.get("fromId").toString());
+        Long toId = Long.parseLong(transferDetails.get("toId").toString());
+        double amount = Double.parseDouble(transferDetails.get("amount").toString());
+
+        boolean transferSuccessful = userService.transferMoney(fromId, toId, amount);
+        if (transferSuccessful) {
+            return ResponseEntity.ok("Transfer Successful");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transfer Failed");
+    }
 }
