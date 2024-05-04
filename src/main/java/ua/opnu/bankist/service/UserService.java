@@ -18,7 +18,6 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -89,22 +88,47 @@ public class UserService {
             User fromUser = fromUserOpt.get();
             User toUser = toUserOpt.get();
 
+            // Check if the user has enough balance (assuming User class has a balance property)
+            double fromUserBalance = fromUser.getTransactions().stream()
+                    .mapToDouble(Transaction::getAmount)
+                    .sum();
+
+            if (fromUserBalance < amount) {
+                System.err.println("Insufficient funds for user " + fromUserId);
+                return false; // Insufficient funds
+            }
+
+            // Create withdrawal transaction
             Transaction withdrawalTransaction = new Transaction();
             withdrawalTransaction.setUser(fromUser);
             withdrawalTransaction.setAmount(-amount);
             withdrawalTransaction.setTransactionType("WITHDRAWAL");
             withdrawalTransaction.setTransactionDate(new Date());
 
+            // Create deposit transaction
             Transaction depositTransaction = new Transaction();
             depositTransaction.setUser(toUser);
             depositTransaction.setAmount(amount);
             depositTransaction.setTransactionType("DEPOSIT");
             depositTransaction.setTransactionDate(new Date());
 
+            // Save both transactions
             transactionRepository.save(withdrawalTransaction);
             transactionRepository.save(depositTransaction);
+
             return true;
+        } else {
+            return false;
         }
-        return false;
+    }
+
+    public boolean deleteUserById(Long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            userRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

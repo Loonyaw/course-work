@@ -51,14 +51,16 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
-        return userService.findUserById(id)
-                .map(user -> {
-                    userService.deleteUser(id);
-                    return ResponseEntity.ok().build();
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long id) {
+        boolean deleted = userService.deleteUserById(id);
+        if (deleted) {
+            // Return a JSON response with a message
+            return ResponseEntity.ok(Map.of("message", "Account Closed Successfully"));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User Not Found"));
+        }
     }
+
 
     @GetMapping("/exists")
     public ResponseEntity<Boolean> userExists(@RequestParam(required = false) String username, @RequestParam(required = false) String email) {
@@ -101,25 +103,36 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/requestLoan")
-    public ResponseEntity<?> requestLoan(@PathVariable Long userId, @RequestBody Map<String, Double> request) {
+    public ResponseEntity<Map<String, String>> requestLoan(@PathVariable Long userId, @RequestBody Map<String, Double> request) {
         double amount = request.get("amount");
         boolean isApproved = userService.requestLoan(userId, amount);
         if (isApproved) {
-            return ResponseEntity.ok("Loan Approved");
+            return ResponseEntity.ok(Map.of("message", "Loan Approved"));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Loan Request Failed");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Loan Request Failed"));
     }
 
+
     @PostMapping("/transfer")
-    public ResponseEntity<?> transferMoney(@RequestBody Map<String, Object> transferDetails) {
+    public ResponseEntity<Map<String, String>> transferMoney(@RequestBody Map<String, Object> transferDetails) {
         Long fromId = Long.parseLong(transferDetails.get("fromId").toString());
         Long toId = Long.parseLong(transferDetails.get("toId").toString());
         double amount = Double.parseDouble(transferDetails.get("amount").toString());
 
         boolean transferSuccessful = userService.transferMoney(fromId, toId, amount);
         if (transferSuccessful) {
-            return ResponseEntity.ok("Transfer Successful");
+            return ResponseEntity.ok(Map.of("message", "Transfer Successful"));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Transfer Failed");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Transfer Failed"));
+    }
+
+    @GetMapping("/card/{cardNumber}")
+    public ResponseEntity<Long> getUserIdByCardNumber(@PathVariable String cardNumber) {
+        Optional<User> user = userRepository.findByCardNumber(cardNumber);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get().getId());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
