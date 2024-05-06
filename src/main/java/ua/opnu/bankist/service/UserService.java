@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ua.opnu.bankist.model.Card;
 import ua.opnu.bankist.model.Transaction;
+import ua.opnu.bankist.model.TransactionType;
 import ua.opnu.bankist.model.User;
 import ua.opnu.bankist.repo.TransactionRepository;
 import ua.opnu.bankist.repo.UserRepository;
@@ -35,16 +36,11 @@ public class UserService {
 
     public User saveUser(User user) {
         try {
-            Card newCard = cardService.createCard();
-            newCard.setUser(user);
-            user.setCard(newCard);
             User savedUser = userRepository.save(user);
-            cardService.saveCard(newCard);
+            Card newCard = cardService.createCardForUser(savedUser);
             return savedUser;
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with provided username or email already exists.", e);
-        } catch (Exception e) {
-            throw e;
         }
     }
 
@@ -63,63 +59,6 @@ public class UserService {
     public boolean authenticate(String username, String password, String pin) {
         Optional<User> user = userRepository.findByUsername(username);
         return user.map(u -> u.getPassword().equals(password) && u.getPin().equals(pin)).orElse(false);
-    }
-
-    public boolean requestLoan(Long userId, double amount) {
-        Optional<User> userOpt = userRepository.findById(userId);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            Transaction loanTransaction = new Transaction();
-            loanTransaction.setUser(user);
-            loanTransaction.setAmount(amount);
-            loanTransaction.setTransactionType("LOAN");
-            loanTransaction.setTransactionDate(new Date());
-            transactionRepository.save(loanTransaction);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean transferMoney(Long fromUserId, Long toUserId, double amount) {
-        Optional<User> fromUserOpt = userRepository.findById(fromUserId);
-        Optional<User> toUserOpt = userRepository.findById(toUserId);
-
-        if (fromUserOpt.isPresent() && toUserOpt.isPresent()) {
-            User fromUser = fromUserOpt.get();
-            User toUser = toUserOpt.get();
-
-            // Check if the user has enough balance (assuming User class has a balance property)
-            double fromUserBalance = fromUser.getTransactions().stream()
-                    .mapToDouble(Transaction::getAmount)
-                    .sum();
-
-            if (fromUserBalance < amount) {
-                System.err.println("Insufficient funds for user " + fromUserId);
-                return false; // Insufficient funds
-            }
-
-            // Create withdrawal transaction
-            Transaction withdrawalTransaction = new Transaction();
-            withdrawalTransaction.setUser(fromUser);
-            withdrawalTransaction.setAmount(-amount);
-            withdrawalTransaction.setTransactionType("WITHDRAWAL");
-            withdrawalTransaction.setTransactionDate(new Date());
-
-            // Create deposit transaction
-            Transaction depositTransaction = new Transaction();
-            depositTransaction.setUser(toUser);
-            depositTransaction.setAmount(amount);
-            depositTransaction.setTransactionType("DEPOSIT");
-            depositTransaction.setTransactionDate(new Date());
-
-            // Save both transactions
-            transactionRepository.save(withdrawalTransaction);
-            transactionRepository.save(depositTransaction);
-
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public boolean deleteUserById(Long id) {

@@ -48,6 +48,7 @@ function updateBalance(movements) {
 }
 
 // Fetch and display user data
+// Fetch and display user data
 function fetchUserData(userId) {
   fetch(`http://localhost:8080/api/users/${userId}`)
     .then((res) => res.json())
@@ -59,27 +60,29 @@ function fetchUserData(userId) {
         pin: data.pin,
       };
 
-      // Assuming the backend response includes card details and transactions
-      const { transactions, card } = data;
+      // Assuming the user has only one card for simplicity
+      const card = data.cards.length > 0 ? data.cards[0] : null;
+
+      if (card) {
+        // Set card information
+        const cardNumberElem = document.getElementById("cardNumber");
+        const cvvElem = document.getElementById("CVV");
+
+        cardNumberElem.setAttribute("data-real-value", card.cardNumber);
+        cvvElem.setAttribute("data-real-value", card.cvv);
+
+        // Initially mask the card number and CVV
+        cardNumberElem.textContent = "********";
+        cvvElem.textContent = "********";
+      }
 
       // Display username in the welcome message
       labelWelcome.textContent = `Добро пожаловать, ${currentUser.username}!`;
 
-      // Set the card number and CVV with attributes for real values
-      const cardNumberElem = document.getElementById("cardNumber");
-      const cvvElem = document.getElementById("CVV");
-
-      cardNumberElem.setAttribute("data-real-value", card.cardNumber);
-      cvvElem.setAttribute("data-real-value", card.cvv);
-
-      // Initially mask the card number and CVV
-      cardNumberElem.textContent = "********";
-      cvvElem.textContent = "********";
-
       // Display the transactions and balance
-      displayMovements(transactions);
-      updateBalance(transactions);
-      updateSummary(transactions);
+      displayMovements(data.transactions);
+      updateBalance(data.transactions);
+      updateSummary(data.transactions);
 
       // Display the current date
       const now = new Date();
@@ -87,9 +90,10 @@ function fetchUserData(userId) {
         navigator.language
       ).format(now);
     })
-    .catch((err) =>
-      console.error("Не удалось получить данные пользователя:", err)
-    );
+    .catch((err) => {
+      console.error("Не удалось получить данные пользователя:", err);
+      alert("Ошибка при получении данных пользователя.");
+    });
 }
 
 // Function to toggle the visibility of sensitive card information
@@ -127,22 +131,24 @@ btnTransfer.addEventListener("click", function (e) {
 });
 
 function transferMoney(fromId, cardNumber, amount) {
-  // Fetch user ID by card number
-  fetch(
-    `http://localhost:8080/api/users/card/${encodeURIComponent(cardNumber)}`
-  )
+  fetch(`http://localhost:8080/api/cards/${encodeURIComponent(cardNumber)}`)
     .then((response) => {
       if (response.ok) return response.json();
       throw new Error("Получатель с этим номером карты не найден.");
     })
-    .then((toId) => {
-      // Proceed with transfer
-      const payload = { fromId, toId, amount };
-      return fetch("http://localhost:8080/api/users/transfer", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+    .then((card) => {
+      if (card.userId) {
+        const toId = card.userId;
+        const payload = { fromId, toId, amount };
+
+        return fetch("http://localhost:8080/api/users/transfer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        throw new Error("Пользователь с этим номером карты не найден.");
+      }
     })
     .then((response) => {
       if (response.ok) return response.json();

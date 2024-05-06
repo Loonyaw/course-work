@@ -1,7 +1,6 @@
 package ua.opnu.bankist.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -26,6 +25,7 @@ public class Transaction {
     @Column(nullable = false)
     private Date transactionDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String transactionType; // "DEPOSIT", "WITHDRAWAL", "LOAN"
+    private TransactionType transactionType;
 }

@@ -3,6 +3,7 @@ package ua.opnu.bankist.rest;
 import org.springframework.http.HttpStatus;
 import ua.opnu.bankist.model.User;
 import ua.opnu.bankist.repo.UserRepository;
+import ua.opnu.bankist.service.TransactionService;
 import ua.opnu.bankist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @GetMapping
     public List<User> getAllUsers() {
@@ -102,37 +106,30 @@ public class UserController {
         return ResponseEntity.ok(false);
     }
 
-    @PostMapping("/{userId}/requestLoan")
-    public ResponseEntity<Map<String, String>> requestLoan(@PathVariable Long userId, @RequestBody Map<String, Double> request) {
-        double amount = request.get("amount");
-        boolean isApproved = userService.requestLoan(userId, amount);
-        if (isApproved) {
-            return ResponseEntity.ok(Map.of("message", "Loan Approved"));
-        }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Loan Request Failed"));
-    }
-
-
     @PostMapping("/transfer")
-    public ResponseEntity<Map<String, String>> transferMoney(@RequestBody Map<String, Object> transferDetails) {
+    public ResponseEntity<Map<String, String>> transfer(@RequestBody Map<String, Object> transferDetails) {
         Long fromId = Long.parseLong(transferDetails.get("fromId").toString());
         Long toId = Long.parseLong(transferDetails.get("toId").toString());
         double amount = Double.parseDouble(transferDetails.get("amount").toString());
 
-        boolean transferSuccessful = userService.transferMoney(fromId, toId, amount);
+        boolean transferSuccessful = transactionService.transferMoney(fromId, toId, amount);
         if (transferSuccessful) {
             return ResponseEntity.ok(Map.of("message", "Transfer Successful"));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Transfer Failed"));
     }
 
-    @GetMapping("/card/{cardNumber}")
-    public ResponseEntity<Long> getUserIdByCardNumber(@PathVariable String cardNumber) {
-        Optional<User> user = userRepository.findByCardNumber(cardNumber);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get().getId());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    @PostMapping("/{userId}/requestLoan")
+    public ResponseEntity<Map<String, String>> requestLoan(@PathVariable Long userId, @RequestBody Map<String, Double> request) {
+        Double amount = request.get("amount");
+        if (amount == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Invalid amount"));
         }
+
+        boolean isApproved = transactionService.requestLoan(userId, amount);
+        if (isApproved) {
+            return ResponseEntity.ok(Map.of("message", "Loan Approved"));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Loan Request Failed"));
     }
 }

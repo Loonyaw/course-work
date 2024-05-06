@@ -3,6 +3,7 @@ package ua.opnu.bankist.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.opnu.bankist.model.Card;
+import ua.opnu.bankist.model.User;
 import ua.opnu.bankist.repo.CardRepository;
 
 import java.util.Date;
@@ -15,13 +16,15 @@ public class CardService {
     @Autowired
     private CardRepository cardRepository;
 
-    public Card createCard() {
+    public Card createCardForUser(User user) {
         Card card = new Card();
+        card.setUser(user);
         card.setCardNumber(generateCardNumber());
         card.setCvv(generateCvv());
         card.setExpirationDate(generateExpirationDate());
-        return card;
+        return cardRepository.save(card);
     }
+
 
     private String generateCardNumber() {
         Random rnd = new Random();
@@ -45,7 +48,11 @@ public class CardService {
         return calendar.getTime();
     }
 
-    public void saveCard(Card card) {
+    public void saveCard(Card card) { // ?
         cardRepository.save(card);
+    }
+
+    public Card getCardByNumber(String cardNumber) {
+        return cardRepository.findByCardNumber(cardNumber);
     }
 }

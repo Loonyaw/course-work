@@ -22,23 +22,12 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Card> cards;
+
     @Column(nullable = false)
     private String pin;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Card card;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactions;
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='[PROTECTED]'" +
-                ", email='" + email + '\'' +
-                ", pin='[PROTECTED]'" +
-                '}';
-    }
 }
