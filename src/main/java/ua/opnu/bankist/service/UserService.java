@@ -5,14 +5,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import ua.opnu.bankist.model.Card;
-import ua.opnu.bankist.model.Transaction;
-import ua.opnu.bankist.model.TransactionType;
 import ua.opnu.bankist.model.User;
-import ua.opnu.bankist.repo.TransactionRepository;
 import ua.opnu.bankist.repo.UserRepository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +18,6 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private CardService cardService;
-    @Autowired
-    private TransactionRepository transactionRepository;
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
@@ -34,18 +27,14 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public User saveUser(User user) {
+    public User saveUser(User user, String currency) {
         try {
             User savedUser = userRepository.save(user);
-            Card newCard = cardService.createCardForUser(savedUser);
+            cardService.createCardForUser(savedUser, currency);
             return savedUser;
         } catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with provided username or email already exists.", e);
         }
-    }
-
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
     }
 
     public boolean existsByUsername(String username) {

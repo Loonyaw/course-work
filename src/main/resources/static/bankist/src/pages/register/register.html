@@ -46,6 +46,20 @@
             class="login__input login__input--password"
             required
           />
+          <div id="currencyModal" class="modal">
+            <div class="modal-content">
+              <h2>Выберите валюту</h2>
+              <select id="currencySelect">
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+                <option value="UAH">UAH</option>
+                <option value="CNY">CNY</option>
+                <option value="JPY">JPY</option>
+              </select>
+              <button id="currencySelectBtn">Продолжить</button>
+            </div>
+          </div>
           <button class="login__btn">&rarr;</button>
           <p class="warning-text" id="registerWarningText"></p>
         </form>

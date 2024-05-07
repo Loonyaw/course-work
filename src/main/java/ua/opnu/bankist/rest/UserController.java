@@ -39,19 +39,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser = userService.saveUser(user);
+    public ResponseEntity<User> createUser(@RequestBody Map<String, Object> userData) {
+        User user = new User();
+        user.setUsername((String) userData.get("username"));
+        user.setEmail((String) userData.get("email"));
+        user.setPassword((String) userData.get("password"));
+        user.setPin((String) userData.get("pin"));
+        String currency = (String) userData.get("currency");
+        User savedUser = userService.saveUser(user, currency);
         return ResponseEntity.ok(savedUser);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.findUserById(id)
-                .map(existingUser -> {
-                    user.setId(id);
-                    return ResponseEntity.ok(userService.saveUser(user));
-                })
-                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")

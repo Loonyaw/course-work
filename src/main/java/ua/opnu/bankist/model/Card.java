@@ -23,9 +23,23 @@ public class Card {
     private String cardNumber;
 
     @Column(nullable = false)
+    private String currency;
+
+    @Column(nullable = false)
     private Date expirationDate;
 
     @Column(nullable = false)
     private int cvv;
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "id=" + id +
+                ", cardNumber='" + cardNumber + '\'' +
+                ", expirationDate=" + expirationDate +
+                ", cvv=" + cvv +
+                ", currency='" + currency + '\'' +
+                '}';
+    }
 
 }

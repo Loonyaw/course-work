@@ -278,11 +278,23 @@ body {
 }
 
 .movements__type--deposit {
-  background-image: var(--gradient-primary);
+  background-color: var(--color-primary);
+  color: var(--white);
 }
 
 .movements__type--withdrawal {
-  background-image: var(--gradient-cancellation);
+  background-color: var(--color-tertiary);
+  color: var(--white);
+}
+
+.movements__type--transfer-in {
+  background-color: var(--color-secondary-opacity);
+  color: var(--black);
+}
+
+.movements__type--transfer-out {
+  background-color: var(--color-tertiary-opacity);
+  color: var(--black);
 }
 
 .movements__value {
@@ -313,10 +325,12 @@ body {
 .summary__value--in,
 .summary__value--interest {
   color: var(--color-primary-darker);
+  white-space: nowrap;
 }
 
 .summary__value--out {
   color: var(--color-tertiary-darker);
+  white-space: nowrap;
 }
 
 .btn--sort {

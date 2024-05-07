@@ -16,12 +16,13 @@ public class CardService {
     @Autowired
     private CardRepository cardRepository;
 
-    public Card createCardForUser(User user) {
+    public Card createCardForUser(User user, String currency) {
         Card card = new Card();
         card.setUser(user);
         card.setCardNumber(generateCardNumber());
         card.setCvv(generateCvv());
         card.setExpirationDate(generateExpirationDate());
+        card.setCurrency(currency);
         return cardRepository.save(card);
     }
 
@@ -46,10 +47,6 @@ public class CardService {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, 5);
         return calendar.getTime();
-    }
-
-    public void saveCard(Card card) { // ?
-        cardRepository.save(card);
     }
 
     public Card getCardByNumber(String cardNumber) {

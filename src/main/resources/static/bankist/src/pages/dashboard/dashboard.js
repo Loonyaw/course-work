@@ -19,10 +19,20 @@ const btnSort = document.getElementById("btnSort");
 
 // Current user
 let currentUser;
+let currentCurrency;
+const currencySymbols = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+  CNY: "¥",
+  JPY: "¥",
+  UAH: "₴",
+};
 
-// Display movements
-function displayMovements(movements) {
+// Update the display functions to accept currency
+function displayMovements(movements, currencyCode) {
   containerMovements.innerHTML = "";
+  const currencySymbol = currencySymbols[currencyCode] || currencyCode;
   movements.forEach((mov, i) => {
     const type = mov.amount > 0 ? "deposit" : "withdrawal";
     const formattedDate = new Intl.DateTimeFormat(navigator.language).format(
@@ -34,20 +44,21 @@ function displayMovements(movements) {
       i + 1
     } ${type}</div>
           <div class="movements__date">${formattedDate}</div>
-          <div class="movements__value">${mov.amount.toFixed(2)}€</div>
+          <div class="movements__value">${mov.amount.toFixed(
+            2
+          )} ${currencySymbol}</div>
       </div>
     `;
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 }
 
-// Display balance
-function updateBalance(movements) {
+function updateBalance(movements, currencyCode) {
   const balance = movements.reduce((acc, mov) => acc + mov.amount, 0);
-  labelBalance.textContent = `${balance.toFixed(2)}€`;
+  const currencySymbol = currencySymbols[currencyCode] || currencyCode;
+  labelBalance.textContent = `${balance.toFixed(2)} ${currencySymbol}`;
 }
 
-// Fetch and display user data
 // Fetch and display user data
 function fetchUserData(userId) {
   fetch(`http://localhost:8080/api/users/${userId}`)
@@ -67,6 +78,7 @@ function fetchUserData(userId) {
         // Set card information
         const cardNumberElem = document.getElementById("cardNumber");
         const cvvElem = document.getElementById("CVV");
+        currentCurrency = card.currency; // Set current currency from the card's currency
 
         cardNumberElem.setAttribute("data-real-value", card.cardNumber);
         cvvElem.setAttribute("data-real-value", card.cvv);
@@ -79,10 +91,10 @@ function fetchUserData(userId) {
       // Display username in the welcome message
       labelWelcome.textContent = `Добро пожаловать, ${currentUser.username}!`;
 
-      // Display the transactions and balance
-      displayMovements(data.transactions);
-      updateBalance(data.transactions);
-      updateSummary(data.transactions);
+      // Display the transactions and balance with the right currency
+      displayMovements(data.transactions, currentCurrency);
+      updateBalance(data.transactions, currentCurrency);
+      updateSummary(data.transactions, currentCurrency);
 
       // Display the current date
       const now = new Date();
@@ -187,7 +199,31 @@ function sortMovements() {
     containerMovements.appendChild(row);
   });
 }
-function updateSummary(movements) {
+// function updateSummary(movements) {
+//   const incomes = movements
+//     .filter((mov) => mov.amount > 0)
+//     .reduce((acc, mov) => acc + mov.amount, 0);
+
+//   const outgoings = movements
+//     .filter((mov) => mov.amount < 0)
+//     .reduce((acc, mov) => acc + mov.amount, 0);
+
+//   // const interest = movements
+//   //   .filter((mov) => mov.amount > 0)
+//   //   .map((mov) => mov.amount * 0.1) // Assuming interest is 10% of deposits
+//   //   .reduce((acc, int) => acc + int, 0);
+
+//   document.getElementById("summaryIn").textContent = `${incomes.toFixed(2)}€`;
+//   document.getElementById("summaryOut").textContent = `${Math.abs(
+//     outgoings
+//   ).toFixed(2)}€`;
+//   // document.getElementById("summaryInterest").textContent = `${interest.toFixed(
+//   //   2
+//   // )}€`;
+// }
+
+// Function to update the summary
+function updateSummary(movements, currencyCode) {
   const incomes = movements
     .filter((mov) => mov.amount > 0)
     .reduce((acc, mov) => acc + mov.amount, 0);
@@ -196,18 +232,13 @@ function updateSummary(movements) {
     .filter((mov) => mov.amount < 0)
     .reduce((acc, mov) => acc + mov.amount, 0);
 
-  // const interest = movements
-  //   .filter((mov) => mov.amount > 0)
-  //   .map((mov) => mov.amount * 0.1) // Assuming interest is 10% of deposits
-  //   .reduce((acc, int) => acc + int, 0);
-
-  document.getElementById("summaryIn").textContent = `${incomes.toFixed(2)}€`;
+  const currencySymbol = currencySymbols[currencyCode] || currencyCode;
+  document.getElementById("summaryIn").textContent = `${incomes.toFixed(
+    2
+  )} ${currencySymbol}`;
   document.getElementById("summaryOut").textContent = `${Math.abs(
     outgoings
-  ).toFixed(2)}€`;
-  // document.getElementById("summaryInterest").textContent = `${interest.toFixed(
-  //   2
-  // )}€`;
+  ).toFixed(2)} ${currencySymbol}`;
 }
 
 // Event handler for requesting a loan
