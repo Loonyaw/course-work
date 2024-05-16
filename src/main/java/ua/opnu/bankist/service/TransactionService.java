@@ -1,15 +1,10 @@
 package ua.opnu.bankist.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ua.opnu.bankist.model.Card;
-import ua.opnu.bankist.model.Transaction;
-import ua.opnu.bankist.model.TransactionType;
-import ua.opnu.bankist.model.User;
-import ua.opnu.bankist.repo.CardRepository;
-import ua.opnu.bankist.repo.TransactionRepository;
+import ua.opnu.bankist.model.*;
+import ua.opnu.bankist.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.opnu.bankist.repo.UserRepository;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +19,10 @@ public class TransactionService {
     private UserRepository userRepository;
     @Autowired
     private CardRepository cardRepository;
+    @Autowired
+    private LoanService loanService;
+    @Autowired
+    private LoanTransactionRepository loanTransactionRepository;
     private Map<String, Double> currencyRates;
 
     public TransactionService() {
@@ -68,74 +67,71 @@ public class TransactionService {
     }
 
     public boolean transferMoney(Long fromUserId, Long toUserId, double amount) {
-        if (fromUserId.equals(toUserId)) {
-            // Prevent self-transfer
-            return false;
+        User fromUser = userRepository.findById(fromUserId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        User toUser = userRepository.findById(toUserId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        // Assuming the users have only one card each for simplicity
+        Card fromCard = cardRepository.findFirstByUserId(fromUserId);
+        Card toCard = cardRepository.findFirstByUserId(toUserId);
+
+        if (fromCard == null || toCard == null) {
+            throw new IllegalArgumentException("Card not found for one of the users.");
         }
 
-        Optional<User> fromUserOpt = userRepository.findById(fromUserId);
-        Optional<User> toUserOpt = userRepository.findById(toUserId);
-
-        if (!fromUserOpt.isPresent() || !toUserOpt.isPresent()) {
-            return false;
+        if (fromCard.getBalance() < amount) {
+            throw new IllegalArgumentException("Insufficient balance.");
         }
 
-        User fromUser = fromUserOpt.get();
-        User toUser = toUserOpt.get();
+        // Convert the amount to the recipient's currency
+        double convertedAmount = convertAmount(amount, fromCard.getCurrency(), toCard.getCurrency());
 
-        // Retrieve cards for each user
-        Card fromUserCard = cardRepository.findFirstByUserId(fromUserId);
-        Card toUserCard = cardRepository.findFirstByUserId(toUserId);
+        // Deduct from the sender's card balance
+        fromCard.setBalance(fromCard.getBalance() - amount);
+        cardRepository.save(fromCard);
 
-        if (fromUserCard == null || toUserCard == null) {
-            return false;
-        }
+        // Add to the recipient's card balance
+        toCard.setBalance(toCard.getBalance() + convertedAmount);
+        cardRepository.save(toCard);
 
-        double fromUserBalance = fromUser.getTransactions().stream()
-                .mapToDouble(Transaction::getAmount)
-                .sum();
+        // Record the transaction
+        Transaction transaction = new Transaction();
+        transaction.setUser(fromUser);
+        transaction.setAmount(-amount);
+        transaction.setTransactionDate(new Date());
+        transaction.setTransactionType(TransactionType.TRANSFER);
+        transactionRepository.save(transaction);
 
-        if (fromUserBalance < amount) {
-            return false; // Insufficient funds
-        }
-
-        // Convert currency if necessary
-        double convertedAmount = convertAmount(amount, fromUserCard.getCurrency(), toUserCard.getCurrency());
-
-        // Create withdrawal transaction
-        Transaction withdrawalTransaction = new Transaction();
-        withdrawalTransaction.setUser(fromUser);
-        withdrawalTransaction.setAmount(-amount);
-        withdrawalTransaction.setTransactionType(TransactionType.WITHDRAWAL);
-        withdrawalTransaction.setTransactionDate(new Date());
-        transactionRepository.save(withdrawalTransaction);
-
-        // Create deposit transaction
-        Transaction depositTransaction = new Transaction();
-        depositTransaction.setUser(toUser);
-        depositTransaction.setAmount(convertedAmount);
-        depositTransaction.setTransactionType(TransactionType.DEPOSIT);
-        depositTransaction.setTransactionDate(new Date());
-        transactionRepository.save(depositTransaction);
+        Transaction transactionReceived = new Transaction();
+        transactionReceived.setUser(toUser);
+        transactionReceived.setAmount(convertedAmount);
+        transactionReceived.setTransactionDate(new Date());
+        transactionReceived.setTransactionType(TransactionType.TRANSFER);
+        transactionRepository.save(transactionReceived);
 
         return true;
     }
 
 
+
     public boolean requestLoan(Long userId, double amount) {
         Optional<User> userOpt = userRepository.findById(userId);
-        if (userOpt.isPresent()) {
-            User user = userOpt.get();
-            Transaction loanTransaction = new Transaction();
-            loanTransaction.setUser(user);
-            loanTransaction.setAmount(amount);
-            loanTransaction.setTransactionType(TransactionType.LOAN);
-            loanTransaction.setTransactionDate(new Date());
-            transactionRepository.save(loanTransaction);
-            return true;
+        if (!userOpt.isPresent()) {
+            return false;
         }
-        return false;
+
+        try {
+            Loan loan = loanService.issueLoan(userOpt.get(), amount);
+
+            LoanTransaction transaction = new LoanTransaction();
+            transaction.setLoan(loan);
+            transaction.setAmount(loan.getAmount());
+            transaction.setTransactionDate(new Date());
+            transaction.setType(TransactionType.LOAN_ISSUE);
+            loanTransactionRepository.save(transaction);
+
+            return true;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
-
-
 }

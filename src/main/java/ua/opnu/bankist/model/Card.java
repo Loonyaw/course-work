@@ -31,6 +31,9 @@ public class Card {
     @Column(nullable = false)
     private int cvv;
 
+    @Column(nullable = false)
+    private double balance;
+
     @Override
     public String toString() {
         return "Card{" +
@@ -39,7 +42,7 @@ public class Card {
                 ", expirationDate=" + expirationDate +
                 ", cvv=" + cvv +
                 ", currency='" + currency + '\'' +
+                ", balance=" + balance +
                 '}';
     }
-
 }

@@ -68,7 +68,7 @@
           <button class="form__btn form__btn--transfer" id="btnTransfer">
             &rarr;
           </button>
-          <label class="form__label">Перевод на</label>
+          <label class="form__label">Счет</label>
           <label class="form__label">Сумма</label>
         </form>
       </div>
@@ -85,6 +85,23 @@
           <button class="form__btn form__btn--loan" id="btnLoan">&rarr;</button>
           <label class="form__label form__label--loan">Сумма</label>
         </form>
+      </div>
+
+      <!-- КОЛОНКА ЗАЙМОВ -->
+      <div class="operation operation--loan-summary">
+        <h2>Ваши займы</h2>
+        <button class="form__btn form__btn--loan-summary" id="btnLoanSummary">
+          Подробнее
+        </button>
+      </div>
+
+      <!-- МОДАЛЬНОЕ ОКНО -->
+      <div id="loanModal" class="modal hidden">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Детали займа</h2>
+          <div id="loanDetails"></div>
+        </div>
       </div>
 
       <!-- ОПЕРАЦИЯ: ЗАКРЫТИЕ СЧЕТА -->
@@ -119,6 +136,7 @@
         <span id="timer" class="timer">05:00</span>
       </p>
     </main>
+
     <script src="/src/pages/dashboard/dashboard.js"></script>
   </body>
 </html>

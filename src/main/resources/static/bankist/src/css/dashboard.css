@@ -46,6 +46,7 @@ body {
   height: 1.5rem;
   cursor: pointer;
 }
+
 /* Tooltip container */
 .tooltip {
   position: relative;
@@ -87,11 +88,13 @@ body {
   border-style: solid;
   border-color: #555 transparent transparent transparent;
 }
+
 .tooltiptext p {
   color: var(--white);
   font-size: 1.3rem;
   letter-spacing: 1px;
 }
+
 .tooltip:hover .tooltiptext {
   visibility: visible;
   opacity: 1;
@@ -103,7 +106,7 @@ body {
 .welcome {
   font-size: 2rem;
   font-weight: 400;
-  color: var(--black);
+  color: var (--black);
 }
 
 .logo {
@@ -117,6 +120,7 @@ body {
   gap: 2rem;
   align-items: center;
 }
+
 .back-to-main {
   color: var(--white);
   font-size: 1.5rem;
@@ -139,9 +143,11 @@ body {
   padding: 3rem;
   transition: all ease-in-out 0.2s;
 }
+
 .login__input.warning {
   border: 1px solid red;
 }
+
 .login__input.warning::placeholder {
   color: red;
 }
@@ -215,14 +221,14 @@ body {
   max-width: 100rem;
   margin: 4rem auto;
   display: grid;
-  grid-template-columns: 4fr 3fr;
+  grid-template-columns: 4fr 3fr 3fr; /* Add more columns */
   grid-template-rows: auto repeat(3, 15rem) auto;
   gap: 2rem;
   transition: all 1s;
 }
 
 .balance {
-  grid-column: 1 / span 2;
+  grid-column: 1 / span 3; /* Update to span across all columns */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -287,14 +293,15 @@ body {
   color: var(--white);
 }
 
-.movements__type--transfer-in {
-  background-color: var(--color-secondary-opacity);
-  color: var(--black);
+.movements__type--loan {
+  background-image: var(--gradient-secondary);
+  color: var(--white);
 }
 
-.movements__type--transfer-out {
-  background-color: var(--color-tertiary-opacity);
-  color: var(--black);
+.movements__loan-details {
+  font-size: 1.1rem;
+  color: #666;
+  margin-left: 1rem;
 }
 
 .movements__value {
@@ -322,9 +329,13 @@ body {
   margin-right: 2.5rem;
 }
 
-.summary__value--in,
-.summary__value--interest {
+.summary__value--in {
   color: var(--color-primary-darker);
+  white-space: nowrap;
+}
+
+.summary__value--interest {
+  color: var(--color-secondary-darker);
   white-space: nowrap;
 }
 
@@ -345,34 +356,48 @@ body {
 }
 
 /* OPERATIONS */
+.operations {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
 .operation {
   border-radius: 1rem;
   padding: 2rem 4rem;
   color: var(--black);
 }
 
-.operation--transfer {
-  background-image: var(--gradient-secondary);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.operation--loan {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-image: var(--gradient-primary);
-}
-
+.operation--transfer,
+.operation--loan,
+.operation--loan-summary,
 .operation--close {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.operation--transfer {
+  background-color: var(--color-secondary);
+  grid-column: 2 / span 2;
+}
+
+.operation--loan {
+  background-color: var(--color-primary);
+  grid-column: 2 / 2;
+}
+
+.operation--loan-summary {
   background-image: var(--gradient-cancellation);
+  grid-column: 3 / 3;
+  width: 20rem;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.operation--close {
+  background-color: var(--color-tertiary-darker);
 }
 
 h2 {
@@ -389,13 +414,15 @@ h2 {
   gap: 0.4rem 1rem;
 }
 
-/* Exceptions for interst */
+/* Exceptions for interest */
 .form.form--loan {
   grid-template-columns: 2.5fr 1fr 2.5fr;
 }
+
 .form__label--loan {
   grid-row: 2;
 }
+
 /* End exceptions */
 
 .form__input {
@@ -441,9 +468,12 @@ h2 {
   text-align: center;
   font-size: 1.25rem;
 }
+
 .logout {
   color: var(--white);
+  grid-column: 1;
 }
+
 .timer {
   font-weight: 600;
 }
@@ -458,6 +488,7 @@ h2 {
 
 .back-to-main,
 .register-link {
+  grid-column: 2/2;
   color: var(--color-primary-darker);
   font-size: 1.5rem;
   text-decoration: none;
@@ -486,4 +517,79 @@ h2 {
   margin: 2rem;
   max-width: 500px;
   margin: auto;
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 30%;
+  max-height: 70%;
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
+.modal-content p {
+  font-size: 1.5rem;
+}
+
+.modal-content h2,
+p {
+  color: #000;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.loan-detail p {
+  max-height: 50vh;
+  overflow-y: auto;
+  color: #000;
+}
+
+.repay__btn {
+  margin-bottom: 20px;
+  margin-top: 20px;
+  background-color: var(--color-primary);
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.repay__btn:hover {
+  background-color: var(--color-primary-darker);
+}
+
+#btnLoanSummary {
+  font-family: "Montserrat";
 }

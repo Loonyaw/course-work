@@ -116,16 +116,29 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/requestLoan")
-    public ResponseEntity<Map<String, String>> requestLoan(@PathVariable Long userId, @RequestBody Map<String, Double> request) {
-        Double amount = request.get("amount");
-        if (amount == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Invalid amount"));
+    public ResponseEntity<Map<String, String>> requestLoan(@PathVariable Long userId, @RequestBody Map<String, Object> request) {
+        Object rawAmount = request.get("amount");
+        Double amount = null;
+
+        if (rawAmount instanceof Integer) {
+            amount = ((Integer) rawAmount).doubleValue();
+        } else if (rawAmount instanceof Double) {
+            amount = (Double) rawAmount;
         }
 
-        boolean isApproved = transactionService.requestLoan(userId, amount);
-        if (isApproved) {
-            return ResponseEntity.ok(Map.of("message", "Loan Approved"));
+        if (amount == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Invalid loan request parameters"));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Loan Request Failed"));
+
+        try {
+            boolean isApproved = transactionService.requestLoan(userId, amount);
+            if (isApproved) {
+                return ResponseEntity.ok(Map.of("message", "Loan Approved"));
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Loan Request Failed"));
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        }
     }
 }
