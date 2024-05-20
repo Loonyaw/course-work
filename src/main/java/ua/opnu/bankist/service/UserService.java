@@ -5,6 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import ua.opnu.bankist.annotations.LogService;
 import ua.opnu.bankist.model.User;
 import ua.opnu.bankist.repo.UserRepository;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@LogService
 public class UserService {
 
     @Autowired

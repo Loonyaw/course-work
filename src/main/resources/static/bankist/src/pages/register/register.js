@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Elements and Variables
   const form = document.getElementById("registrationForm");
   const warningText = document.getElementById("registerWarningText");
   const currencyModal = document.getElementById("currencyModal");
   const currencySelect = document.getElementById("currencySelect");
   const currencySelectBtn = document.getElementById("currencySelectBtn");
+  const currencyCancelBtn = document.getElementById("currencyCancelBtn");
 
   let username, email, password, pin;
 
@@ -12,6 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
     let errorMessage = "";
 
+    // Retrieve form values
     username = form.querySelector(".login__input--user").value;
     email = form.querySelector(".login__input--email").value;
     password = form.querySelector(".login__input--password").value;
@@ -30,12 +33,14 @@ document.addEventListener("DOMContentLoaded", function () {
       errorMessage = "Пароли не совпадают!";
     }
 
+    // Display validation error message if any
     if (errorMessage) {
       warningText.textContent = errorMessage;
       warningText.classList.add("active");
       return;
     }
 
+    // Check if user already exists
     const userExists = await checkUserExists(username, email);
     if (userExists) {
       warningText.textContent =
@@ -44,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    // Clear any previous warning messages
     warningText.textContent = "";
     warningText.classList.remove("active");
 
@@ -56,6 +62,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const currency = currencySelect.value;
     currencyModal.style.display = "none";
     registerUserWithCurrency(username, email, password, currency);
+  });
+
+  // Handle canceling currency selection
+  currencyCancelBtn.addEventListener("click", function () {
+    currencyModal.style.display = "none";
   });
 
   // Function to check if a user exists by username or email
@@ -80,6 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
       );
       if (!pin) {
         alert("Регистрация отменена. PIN не был введен.");
+        currencyModal.style.display = "none"; // Close the currency modal
         return;
       }
     } while (!validatePin(pin));
@@ -94,7 +106,6 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((response) => {
         if (response.ok) {
           alert("Регистрация прошла успешно!");
-          closeModal();
           window.location.href = "/src/pages/login/login.html";
         } else {
           response.json().then((data) => {
@@ -106,10 +117,6 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Ошибка при отправке данных:", error);
         alert("Ошибка при регистрации. Попробуйте ещё раз.");
       });
-  }
-
-  function closeModal() {
-    currencyModal.style.display = "none";
   }
 
   // Validation functions

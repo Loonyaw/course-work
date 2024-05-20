@@ -1,4 +1,5 @@
 :root {
+  /* Color Variables */
   --color-primary: #5ec576;
   --color-secondary: #ffcb03;
   --color-tertiary: #ff585f;
@@ -15,6 +16,7 @@
   --black: #000000;
 }
 
+/* Reset and Base Styles */
 * {
   margin: 0;
   padding: 0;
@@ -39,11 +41,10 @@ body {
   background-attachment: fixed;
 }
 
-/* GENERAL ELEMENTS */
+/* General Elements */
 .section {
   padding: 15rem 3rem;
   border-top: 1px solid #ddd;
-
   transition: transform 1s, opacity 1s;
 }
 
@@ -111,11 +112,12 @@ body {
 .btn---close-cookie {
   color: var(--black);
 }
+
 p {
   color: #666;
 }
 
-/* This is BAD for accessibility! Don't do in the real world! */
+/* Accessibility Note: Avoid removing focus outlines */
 button:focus {
   outline: none;
 }
@@ -128,7 +130,7 @@ img {
   filter: blur(20px);
 }
 
-/* NAVIGATION */
+/* Navigation */
 .nav {
   display: flex;
   justify-content: space-between;
@@ -140,7 +142,6 @@ img {
   flex-direction: row;
 }
 
-/* nav and stickly class at the same time */
 .nav.sticky {
   position: fixed;
   background-color: rgba(255, 255, 255, 0.95);
@@ -151,9 +152,11 @@ img {
   height: 4.5rem;
   transition: all 0.3s;
 }
+
 .hamburger {
   display: none;
 }
+
 .nav__links {
   display: flex;
   align-items: center;
@@ -186,17 +189,20 @@ img {
   color: var(--black);
 }
 
+/* Forms */
 form {
   display: flex;
   flex-direction: column;
   gap: 3rem;
 }
+
 .form-buttons {
   display: flex;
   flex-direction: row;
   gap: 3rem;
   justify-content: center;
 }
+
 .next--step {
   padding: 1rem;
   border-radius: 2rem;
@@ -210,13 +216,14 @@ form {
   width: 30%;
   text-align: center;
 }
+
 .next--step:hover {
   color: inherit;
   background-color: var(--color-primary-darker);
   color: #333;
 }
 
-/* HEADER */
+/* Header */
 .header {
   padding: 0 3rem;
   height: 100vh;
@@ -233,6 +240,7 @@ form {
   align-items: center;
   gap: 1.5rem;
 }
+
 .header-content {
   display: flex;
   flex-direction: column;
@@ -272,13 +280,14 @@ h4 {
   background-image: var(--gradient-primary);
 }
 
-/* FEATURES */
+/* Features */
 .features {
   display: grid;
   grid-template-columns: 1fr;
   gap: 4rem;
   margin: 0 12rem;
 }
+
 .feature-one,
 .feature-two,
 .feature-three {
@@ -320,11 +329,10 @@ h4 {
   margin-bottom: 1rem;
 }
 
-/* OPERATIONS */
+/* Operations */
 .operations {
   max-width: 100rem;
   margin: 12rem auto 0 auto;
-
   background-color: var(--white);
 }
 
@@ -406,23 +414,28 @@ h4 {
 .operations__icon--1 {
   background-color: var(--color-secondary-opacity);
 }
+
 .operations__icon--2 {
   background-color: var(--color-primary-opacity);
 }
+
 .operations__icon--3 {
   background-color: var(--color-tertiary-opacity);
 }
+
 .operations__icon--1 svg {
   fill: var(--color-secondary-darker);
 }
+
 .operations__icon--2 svg {
   fill: var(--color-primary);
 }
+
 .operations__icon--3 svg {
   fill: var(--color-tertiary);
 }
 
-/* SLIDER */
+/* Slider */
 .slider {
   max-width: 100rem;
   height: 60rem;
@@ -502,7 +515,7 @@ h4 {
   opacity: 1;
 }
 
-/* TESTIMONIALS */
+/* Testimonials */
 .testimonial {
   width: 65%;
   position: relative;
@@ -535,7 +548,6 @@ h4 {
 .testimonial__author {
   margin-left: 3rem;
   font-style: normal;
-
   display: grid;
   grid-template-columns: 6.5rem 1fr;
   column-gap: 2rem;
@@ -562,7 +574,7 @@ h4 {
   margin-bottom: 4rem;
 }
 
-/* SIGNUP */
+/* Sign Up */
 .section--sign-up {
   background-color: #37383d;
   border-top: none;
@@ -585,7 +597,7 @@ h4 {
   padding: 2rem 5rem;
 }
 
-/* FOOTER */
+/* Footer */
 .footer {
   padding: 10rem 3rem;
   background-color: #37383d;
@@ -628,12 +640,13 @@ h4 {
   font-size: 1.4rem;
 }
 
+/* Miscellaneous */
 .hidden {
   visibility: hidden;
   opacity: 0;
 }
 
-/* COOKIE MESSAGE */
+/* Cookie Message */
 .cookie-message {
   position: fixed;
   bottom: 0;

@@ -22,7 +22,7 @@ const loanDetails = document.getElementById("loanDetails");
 const closeBtn = document.querySelector(".modal .close");
 const repayLoanBtn = document.getElementById("repayLoan");
 
-// Current user
+// Current user and currency details
 let currentUser;
 let currentCurrency;
 const currencySymbols = {
@@ -47,6 +47,7 @@ function displayMovements(movements, currencyCode) {
   // Reverse the sorted movements to get the newest first
   const reversedMovements = sortedMovements.reverse();
 
+  // Display each movement
   reversedMovements.forEach((mov, i) => {
     const type =
       mov.type === "LOAN_ISSUE" || mov.transactionType === "LOAN_ISSUE"
@@ -63,20 +64,21 @@ function displayMovements(movements, currencyCode) {
         : "";
     const html = `
       <div class="movements__row">
-          <div class="movements__type movements__type--${type}">${
+        <div class="movements__type movements__type--${type}">${
       sortedMovements.length - i
     } ${type}</div>
-          <div class="movements__date">${formattedDate}</div>
-          <div class="movements__value">${mov.amount.toFixed(
-            2
-          )} ${currencySymbol}</div>
-          ${loanDetails}
+        <div class="movements__date">${formattedDate}</div>
+        <div class="movements__value">${mov.amount.toFixed(
+          2
+        )} ${currencySymbol}</div>
+        ${loanDetails}
       </div>
     `;
     containerMovements.insertAdjacentHTML("beforeend", html);
   });
 }
 
+// Update balance display
 function updateBalance(movements, currencyCode) {
   const balance = movements.reduce((acc, mov) => acc + mov.amount, 0);
   const currencySymbol = currencySymbols[currencyCode] || currencyCode;
@@ -88,18 +90,16 @@ function fetchUserData(userId) {
   fetch(`http://localhost:8080/api/users/${userId}`)
     .then((res) => res.json())
     .then((data) => {
-      // Update the `currentUser` object with user data
+      // Update the currentUser object with user data
       currentUser = {
         id: data.id,
         username: data.username,
         pin: data.pin,
       };
 
-      // Assuming the user has only one card for simplicity
+      // Set card information
       const card = data.cards.length > 0 ? data.cards[0] : null;
-
       if (card) {
-        // Set card information
         const cardNumberElem = document.getElementById("cardNumber");
         const cvvElem = document.getElementById("CVV");
         currentCurrency = card.currency; // Set current currency from the card's currency
@@ -151,12 +151,6 @@ function fetchUserData(userId) {
     });
 }
 
-function updateBalance(movements, currencyCode) {
-  // No need to calculate balance from movements; it is already fetched from the backend
-  const currencySymbol = currencySymbols[currencyCode] || currencyCode;
-  // The balance is updated in fetchUserData and displayed there directly
-}
-
 // Function to toggle the visibility of sensitive card information
 function toggleVisibility(element) {
   const hiddenValue = "********";
@@ -191,6 +185,7 @@ btnTransfer.addEventListener("click", function (e) {
   inputTransferAmount.value = inputTransferTo.value = "";
 });
 
+// Function to transfer money
 function transferMoney(fromId, cardNumber, amount) {
   fetch(`http://localhost:8080/api/cards/${encodeURIComponent(cardNumber)}`)
     .then((response) => {
@@ -222,6 +217,7 @@ function transferMoney(fromId, cardNumber, amount) {
     .catch((error) => alert(error.message));
 }
 
+// Function to sort movements
 let ascendingOrder = true;
 function sortMovements() {
   const movementsRows = Array.from(
@@ -288,6 +284,7 @@ btnLoan.addEventListener("click", function (e) {
   inputLoanAmount.value = "";
 });
 
+// Function to request a loan
 function requestLoan(userId, amount) {
   fetch(`http://localhost:8080/api/users/${userId}/requestLoan`, {
     method: "POST",
@@ -311,6 +308,7 @@ function requestLoan(userId, amount) {
     });
 }
 
+// Event handler for loan summary
 btnLoanSummary.addEventListener("click", function () {
   fetch(`http://localhost:8080/api/users/${currentUser.id}`)
     .then((res) => res.json())
@@ -325,6 +323,7 @@ btnLoanSummary.addEventListener("click", function () {
     .catch((err) => console.error("Error fetching user data:", err));
 });
 
+// Close loan modal
 closeBtn.addEventListener("click", function () {
   loanModal.classList.add("hidden");
 });
@@ -336,6 +335,7 @@ loanModal.addEventListener("click", function (e) {
   }
 });
 
+// Function to display loan details
 function displayLoanDetails(loans) {
   const loanDetails = document.getElementById("loanDetails");
   loanDetails.innerHTML = "";
@@ -417,10 +417,12 @@ btnLogout.addEventListener("click", function () {
   window.location.href = "/src/pages/login/login.html";
 });
 
+// Event handler for sorting movements
 btnSort.addEventListener("click", function () {
   sortMovements();
 });
 
+// Event handler for closing account
 btnClose.addEventListener("click", function (e) {
   e.preventDefault();
   const username = inputCloseUser.value.trim();

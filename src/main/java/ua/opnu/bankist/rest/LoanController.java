@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ua.opnu.bankist.annotations.LogController;
 import ua.opnu.bankist.service.LoanService;
 
 import java.util.Map;
 
 @RestController
+@LogController
 @RequestMapping("/api/loans")
 public class LoanController {
 

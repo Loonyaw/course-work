@@ -1,6 +1,7 @@
 package ua.opnu.bankist.rest;
 
 import org.springframework.http.HttpStatus;
+import ua.opnu.bankist.annotations.LogController;
 import ua.opnu.bankist.model.User;
 import ua.opnu.bankist.repo.UserRepository;
 import ua.opnu.bankist.service.TransactionService;
@@ -14,6 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
+@LogController
 @RequestMapping("/api/users")
 public class UserController {
 

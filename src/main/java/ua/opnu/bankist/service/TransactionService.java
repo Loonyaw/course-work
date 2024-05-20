@@ -1,6 +1,7 @@
 package ua.opnu.bankist.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ua.opnu.bankist.annotations.LogService;
 import ua.opnu.bankist.model.*;
 import ua.opnu.bankist.repo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
+@LogService
 public class TransactionService {
 
     @Autowired
@@ -70,7 +72,6 @@ public class TransactionService {
         User fromUser = userRepository.findById(fromUserId).orElseThrow(() -> new IllegalArgumentException("User not found"));
         User toUser = userRepository.findById(toUserId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-        // Assuming the users have only one card each for simplicity
         Card fromCard = cardRepository.findFirstByUserId(fromUserId);
         Card toCard = cardRepository.findFirstByUserId(toUserId);
 
@@ -82,18 +83,14 @@ public class TransactionService {
             throw new IllegalArgumentException("Insufficient balance.");
         }
 
-        // Convert the amount to the recipient's currency
         double convertedAmount = convertAmount(amount, fromCard.getCurrency(), toCard.getCurrency());
 
-        // Deduct from the sender's card balance
         fromCard.setBalance(fromCard.getBalance() - amount);
         cardRepository.save(fromCard);
 
-        // Add to the recipient's card balance
         toCard.setBalance(toCard.getBalance() + convertedAmount);
         cardRepository.save(toCard);
 
-        // Record the transaction
         Transaction transaction = new Transaction();
         transaction.setUser(fromUser);
         transaction.setAmount(-amount);
@@ -110,8 +107,6 @@ public class TransactionService {
 
         return true;
     }
-
-
 
     public boolean requestLoan(Long userId, double amount) {
         Optional<User> userOpt = userRepository.findById(userId);

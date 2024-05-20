@@ -1,5 +1,6 @@
 package ua.opnu.bankist.rest;
 
+import ua.opnu.bankist.annotations.LogController;
 import ua.opnu.bankist.model.Transaction;
 import ua.opnu.bankist.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@LogController
 @RequestMapping("/api/transactions")
 public class TransactionController {
 

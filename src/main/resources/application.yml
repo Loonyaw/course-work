@@ -14,3 +14,10 @@ spring:
     username: postgres
     password: 1234
     driverClassName: org.postgresql.Driver
+logging:
+  file:
+    name: logs/bankist.log
+  level:
+    root: INFO
+    ua.opnu.bankist: DEBUG
+  config: classpath:logback-spring.xml

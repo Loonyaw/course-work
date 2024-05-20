@@ -3,11 +3,13 @@ package ua.opnu.bankist.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ua.opnu.bankist.annotations.LogController;
 import ua.opnu.bankist.dto.CardUserDTO;
 import ua.opnu.bankist.model.Card;
 import ua.opnu.bankist.service.CardService;
 
 @RestController
+@LogController
 @RequestMapping("/api/cards")
 public class CardController {
 

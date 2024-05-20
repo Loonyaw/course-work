@@ -235,3 +235,9 @@ hamMenu.addEventListener("click", function () {
     navLinks.classList.toggle("active");
   }
 });
+
+document
+  .getElementById("open-account-btn")
+  .addEventListener("click", function () {
+    window.location.href = "/src/pages/register/register.html";
+  });

@@ -1,30 +1,39 @@
 "use strict";
 
+// Select input elements and warning text
 const inputLoginUsername = document.querySelector(".login__input--user");
 const inputLoginPin = document.querySelector(".login__input--password");
 const warningText = document.querySelector(".warning-text");
 
+// Event listener for the login form submission
 document.querySelector(".login").addEventListener("submit", function (event) {
   event.preventDefault();
 
+  // Get input values
   const username = inputLoginUsername.value;
   const password = inputLoginPin.value;
 
+  // Check if inputs are valid
   if (!checkInputs(username, password)) {
     return;
   }
 
+  // Validate credentials
   validateCredentials(username, password)
     .then((isValid) => {
       if (!isValid) {
         displayWarning("Неверное имя пользователя или пароль!");
         return;
       }
+
+      // Prompt for PIN
       const pin = prompt("Введите ваш PIN:");
       if (!pin) {
         displayWarning("PIN не введен!");
         return;
       }
+
+      // Check login with username, password, and PIN
       checkLogin(username, password, pin);
     })
     .catch((error) => {
@@ -33,6 +42,7 @@ document.querySelector(".login").addEventListener("submit", function (event) {
     });
 });
 
+// Function to validate credentials via API
 function validateCredentials(username, password) {
   return fetch("http://localhost:8080/api/users/validateCredentials", {
     method: "POST",
@@ -47,6 +57,7 @@ function validateCredentials(username, password) {
     });
 }
 
+// Function to check login via API
 function checkLogin(username, password, pin) {
   fetch("http://localhost:8080/api/users/login", {
     method: "POST",
@@ -73,6 +84,7 @@ function checkLogin(username, password, pin) {
     });
 }
 
+// Function to check if inputs are valid
 function checkInputs(username, password) {
   let isValid = true;
   if (!username && !password) {
@@ -92,11 +104,13 @@ function checkInputs(username, password) {
   return isValid;
 }
 
+// Function to display warning messages
 function displayWarning(message) {
   warningText.textContent = message;
   warningText.classList.add("active");
 }
 
+// Remove warning class when user inputs data
 inputLoginUsername.addEventListener("input", () => {
   inputLoginUsername.classList.remove("warning");
 });

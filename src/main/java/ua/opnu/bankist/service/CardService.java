@@ -2,6 +2,7 @@ package ua.opnu.bankist.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.opnu.bankist.annotations.LogService;
 import ua.opnu.bankist.model.Card;
 import ua.opnu.bankist.model.User;
 import ua.opnu.bankist.repo.CardRepository;
@@ -11,6 +12,7 @@ import java.util.Random;
 import java.util.Calendar;
 
 @Service
+@LogService
 public class CardService {
 
     @Autowired

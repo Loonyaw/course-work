@@ -35,3 +35,6 @@ build/
 # misc
 .DS_Store
 node_modules
+
+#logs
+/logs
