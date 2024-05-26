@@ -1,6 +1,7 @@
 package ua.opnu.bankist.rest;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import ua.opnu.bankist.annotations.LogController;
 import ua.opnu.bankist.model.User;
 import ua.opnu.bankist.repo.UserRepository;
@@ -27,6 +28,9 @@ public class UserController {
 
     @Autowired
     private TransactionService transactionService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<User> getAllUsers() {
@@ -98,8 +102,11 @@ public class UserController {
         String username = credentials.get("username");
         String password = credentials.get("password");
         Optional<User> userOpt = userRepository.findByUsername(username);
-        if (userOpt.isPresent() && userOpt.get().getPassword().equals(password)) {
-            return ResponseEntity.ok(true);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                return ResponseEntity.ok(true);
+            }
         }
         return ResponseEntity.ok(false);
     }

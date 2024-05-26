@@ -3,6 +3,7 @@ package ua.opnu.bankist.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ua.opnu.bankist.annotations.LogService;
@@ -20,6 +21,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private CardService cardService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<User> findAllUsers() {
         return userRepository.findAll();
@@ -30,6 +33,7 @@ public class UserService {
     }
 
     public User saveUser(User user, String currency) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             User savedUser = userRepository.save(user);
             cardService.createCardForUser(savedUser, currency);
@@ -49,7 +53,7 @@ public class UserService {
 
     public boolean authenticate(String username, String password, String pin) {
         Optional<User> user = userRepository.findByUsername(username);
-        return user.map(u -> u.getPassword().equals(password) && u.getPin().equals(pin)).orElse(false);
+        return user.map(u -> passwordEncoder.matches(password, u.getPassword()) && u.getPin().equals(pin)).orElse(false);
     }
 
     public boolean deleteUserById(Long id) {
