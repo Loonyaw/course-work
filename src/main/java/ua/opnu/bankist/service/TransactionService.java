@@ -12,46 +12,53 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
-@LogService
+@LogService // Custom annotation to enable logging for this service
 public class TransactionService {
 
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionRepository transactionRepository; // Injecting the TransactionRepository dependency
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository; // Injecting the UserRepository dependency
     @Autowired
-    private CardRepository cardRepository;
+    private CardRepository cardRepository; // Injecting the CardRepository dependency
     @Autowired
-    private LoanService loanService;
+    private LoanService loanService; // Injecting the LoanService dependency
     @Autowired
-    private LoanTransactionRepository loanTransactionRepository;
+    private LoanTransactionRepository loanTransactionRepository; // Injecting the LoanTransactionRepository dependency
     private Map<String, Double> currencyRates;
 
     public TransactionService() {
+        // Load currency rates from a JSON file
         loadCurrencyRates();
     }
 
     public List<Transaction> findAllTransactions() {
+        // Retrieve all transactions
         return transactionRepository.findAll();
     }
 
     public Optional<Transaction> findTransactionById(Long id) {
+        // Find a transaction by its ID
         return transactionRepository.findById(id);
     }
 
     public Transaction saveTransaction(Transaction transaction) {
+        // Save a transaction to the repository
         return transactionRepository.save(transaction);
     }
 
     public void deleteTransaction(Long id) {
+        // Delete a transaction by its ID
         transactionRepository.deleteById(id);
     }
 
     public List<Transaction> getTransactionsForUser(Long userId) {
+        // Retrieve transactions for a specific user
         return transactionRepository.findByUserId(userId);
     }
 
     private void loadCurrencyRates() {
+        // Load currency rates from a JSON file
         ObjectMapper mapper = new ObjectMapper();
         try {
             Map<String, Map<String, Double>> data = mapper.readValue(new File("src/main/resources/static/bankist/exchangeRates.json"), HashMap.class);
@@ -63,12 +70,14 @@ public class TransactionService {
     }
 
     public double convertAmount(double amount, String fromCurrency, String toCurrency) {
+        // Convert an amount from one currency to another
         double rateFrom = currencyRates.getOrDefault(fromCurrency, 1.0);
         double rateTo = currencyRates.getOrDefault(toCurrency, 1.0);
         return (amount * rateFrom) / rateTo;
     }
 
     public boolean transferMoney(Long fromUserId, Long toUserId, double amount) {
+        // Transfer money between two users
         User fromUser = userRepository.findById(fromUserId).orElseThrow(() -> new IllegalArgumentException("User not found"));
         User toUser = userRepository.findById(toUserId).orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -109,6 +118,7 @@ public class TransactionService {
     }
 
     public boolean requestLoan(Long userId, double amount) {
+        // Request a loan for a user
         Optional<User> userOpt = userRepository.findById(userId);
         if (!userOpt.isPresent()) {
             return false;

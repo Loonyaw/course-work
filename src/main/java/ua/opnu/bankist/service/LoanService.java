@@ -14,19 +14,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@LogService
+@LogService // Custom annotation to enable logging for this service
 public class LoanService {
 
     @Autowired
-    private LoanRepository loanRepository;
+    private LoanRepository loanRepository; // Injecting the LoanRepository dependency
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionRepository transactionRepository; // Injecting the TransactionRepository dependency
     @Autowired
-    private CardRepository cardRepository;
+    private CardRepository cardRepository; // Injecting the CardRepository dependency
 
-    private static final double DEFAULT_INTEREST_RATE = 5.0;
+    private static final double DEFAULT_INTEREST_RATE = 5.0; // Default interest rate for loans
 
     public Loan issueLoan(User user, double amount) {
+        // Issue a new loan for a user with the specified amount
         if (hasUnpaidLoans(user.getId())) {
             throw new IllegalArgumentException("User has unpaid loans. Cannot issue a new loan.");
         }
@@ -48,6 +49,7 @@ public class LoanService {
     }
 
     public boolean hasUnpaidLoans(Long userId) {
+        // Check if the user has any unpaid loans
         List<Loan> loans = loanRepository.findByUserId(userId);
         for (Loan loan : loans) {
             if (loan.getAmount() > 0) {
@@ -58,6 +60,7 @@ public class LoanService {
     }
 
     public double calculateInterestRate(double amount) {
+        // Calculate the interest rate based on the loan amount
         if (amount <= 1000) {
             return DEFAULT_INTEREST_RATE;
         } else if (amount <= 5000) {
@@ -68,6 +71,7 @@ public class LoanService {
     }
 
     public Date calculateDueDate(double amount) {
+        // Calculate the due date based on the loan amount
         Calendar calendar = Calendar.getInstance();
         if (amount <= 1000) {
             calendar.add(Calendar.MONTH, 12);
@@ -80,6 +84,7 @@ public class LoanService {
     }
 
     public void repayLoan(Long loanId, Double repaymentAmount) throws Exception {
+        // Repay a loan with the specified repayment amount
         Optional<Loan> loanOpt = loanRepository.findById(loanId);
         if (!loanOpt.isPresent()) {
             throw new Exception("Loan not found");

@@ -12,13 +12,14 @@ import java.util.Random;
 import java.util.Calendar;
 
 @Service
-@LogService
+@LogService // Custom annotation to enable logging for this service
 public class CardService {
 
     @Autowired
-    private CardRepository cardRepository;
+    private CardRepository cardRepository; // Injecting the CardRepository dependency
 
     public Card createCardForUser(User user, String currency) {
+        // Create a new card for a user with the specified currency
         Card card = new Card();
         card.setUser(user);
         card.setCardNumber(generateCardNumber());
@@ -28,8 +29,8 @@ public class CardService {
         return cardRepository.save(card);
     }
 
-
     private String generateCardNumber() {
+        // Generate a random card number
         Random rnd = new Random();
         StringBuilder cardNumber = new StringBuilder("4000 ");
         for (int i = 0; i < 12; i++) {
@@ -42,16 +43,19 @@ public class CardService {
     }
 
     private int generateCvv() {
+        // Generate a random CVV code
         return new Random().nextInt(900) + 100;
     }
 
     private Date generateExpirationDate() {
+        // Generate an expiration date 5 years from now
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, 5);
         return calendar.getTime();
     }
 
     public Card getCardByNumber(String cardNumber) {
+        // Retrieve a card by its number
         return cardRepository.findByCardNumber(cardNumber);
     }
 }

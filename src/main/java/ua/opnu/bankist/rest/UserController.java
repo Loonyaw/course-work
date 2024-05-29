@@ -16,29 +16,31 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@LogController
-@RequestMapping("/api/users")
+@LogController // Custom annotation to enable logging for this controller
+@RequestMapping("/api/users") // Base URL for all endpoints in this controller
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserService userService; // Injecting the UserService dependency
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository userRepository; // Injecting the UserRepository dependency
 
     @Autowired
-    private TransactionService transactionService;
+    private TransactionService transactionService; // Injecting the TransactionService dependency
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder; // Injecting the PasswordEncoder dependency
 
     @GetMapping
     public List<User> getAllUsers() {
+        // Fetch all users
         return userService.findAllUsers();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        // Fetch a user by its ID
         return userService.findUserById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -46,6 +48,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody Map<String, Object> userData) {
+        // Create a new user
         User user = new User();
         user.setUsername((String) userData.get("username"));
         user.setEmail((String) userData.get("email"));
@@ -58,18 +61,18 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable Long id) {
+        // Delete a user by its ID
         boolean deleted = userService.deleteUserById(id);
         if (deleted) {
-            // Return a JSON response with a message
             return ResponseEntity.ok(Map.of("message", "Account Closed Successfully"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "User Not Found"));
         }
     }
 
-
     @GetMapping("/exists")
     public ResponseEntity<Boolean> userExists(@RequestParam(required = false) String username, @RequestParam(required = false) String email) {
+        // Check if a user exists by username or email
         boolean exists = false;
         if (username != null && userService.existsByUsername(username)) {
             exists = true;
@@ -82,6 +85,7 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> credentials) {
+        // Authenticate user and return user ID if successful
         boolean authenticated = userService.authenticate(credentials.get("username"), credentials.get("password"), credentials.get("pin"));
         if (authenticated) {
             Optional<User> user = userRepository.findByUsername(credentials.get("username"));
@@ -96,9 +100,9 @@ public class UserController {
         }
     }
 
-
     @PostMapping("/validateCredentials")
     public ResponseEntity<Boolean> validateCredentials(@RequestBody Map<String, String> credentials) {
+        // Validate user credentials
         String username = credentials.get("username");
         String password = credentials.get("password");
         Optional<User> userOpt = userRepository.findByUsername(username);
@@ -113,6 +117,7 @@ public class UserController {
 
     @PostMapping("/transfer")
     public ResponseEntity<Map<String, String>> transfer(@RequestBody Map<String, Object> transferDetails) {
+        // Transfer money between users
         Long fromId = Long.parseLong(transferDetails.get("fromId").toString());
         Long toId = Long.parseLong(transferDetails.get("toId").toString());
         double amount = Double.parseDouble(transferDetails.get("amount").toString());
@@ -126,6 +131,7 @@ public class UserController {
 
     @PostMapping("/{userId}/requestLoan")
     public ResponseEntity<Map<String, String>> requestLoan(@PathVariable Long userId, @RequestBody Map<String, Object> request) {
+        // Request a loan for the user
         Object rawAmount = request.get("amount");
         Double amount = null;
 
