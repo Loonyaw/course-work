@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((response) => {
         if (response.ok) {
           alert("Регистрация прошла успешно!");
-          window.location.href = "/src/pages/login/login.html";
+          window.location.href = "/bankist/src/pages/login/login.html";
         } else {
           response.json().then((data) => {
             alert(`Ошибка регистрации: ${data.message}`);

@@ -414,7 +414,7 @@ btnLogout.addEventListener("click", function () {
   // Clear session data
   console.log("Пользователь вышел из системы");
   sessionStorage.clear();
-  window.location.href = "/src/pages/login/login.html";
+  window.location.href = "/bankist/src/pages/login/login.html";
 });
 
 // Event handler for sorting movements
@@ -448,7 +448,7 @@ btnClose.addEventListener("click", function (e) {
       // No response body expected on successful DELETE
       sessionStorage.clear();
       alert("Ваш аккаунт успешно закрыт.");
-      window.location.href = "/src/pages/login/login.html"; // Redirect to login page
+      window.location.href = "/bankist/src/pages/login/login.html"; // Redirect to login page
     })
     .catch((err) => alert(err.message));
 });
@@ -463,7 +463,7 @@ function startLogoutTimer() {
     if (time === 0) {
       clearInterval(timer);
       sessionStorage.clear();
-      window.location.href = "/src/pages/login/login.html";
+      window.location.href = "/bankist/src/pages/login/login.html";
     }
     time--;
   }, 1000);
@@ -478,6 +478,6 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchUserData(userId);
     startLogoutTimer();
   } else {
-    window.location.href = "/src/pages/login/login.html";
+    window.location.href = "/bankist/src/pages/login/login.html";
   }
 });

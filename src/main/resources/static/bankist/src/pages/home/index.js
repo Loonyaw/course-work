@@ -26,7 +26,7 @@ navLinks.addEventListener("click", function (e) {
   var target = e.target;
   if (e.target && target.classList.contains("nav__link")) {
     var id = target.getAttribute("href");
-    var ignoreHref = "/src/pages/register/register.html";
+    var ignoreHref = "/bankist/src/pages/register/register.html";
     if (id === ignoreHref) {
       window.location.href = ignoreHref;
     } else if (id) {
@@ -239,5 +239,5 @@ hamMenu.addEventListener("click", function () {
 document
   .getElementById("open-account-btn")
   .addEventListener("click", function () {
-    window.location.href = "/src/pages/register/register.html";
+    window.location.href = "/bankist/src/pages/register/register.html";
   });

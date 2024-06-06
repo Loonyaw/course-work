@@ -72,7 +72,7 @@ function checkLogin(username, password, pin) {
           const userId = data.userId;
           sessionStorage.setItem("currentUserId", userId);
           console.log("Logged in successfully!");
-          window.location.href = "/src/pages/dashboard/dashboard.html";
+          window.location.href = "/bankist/src/pages/dashboard/dashboard.html";
         });
       } else {
         displayWarning("Неверное имя пользователя, пароль или PIN!");
